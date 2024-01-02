@@ -616,11 +616,8 @@ class _BcryptBackend(_BcryptCommon):
             import bcrypt as _bcrypt
         except ImportError: # pragma: no cover
             return False
-        try:
-            version = _bcrypt.__about__.__version__
-        except:
-            log.warning("(trapped) error reading bcrypt version", exc_info=True)
-            version = '<unknown>'
+
+        version = getattr(getattr(_bcrypt, '__about__', _bcrypt), '__version__', '<unknown>')
 
         log.debug("detected 'bcrypt' backend, version %r", version)
         return mixin_cls._finalize_backend_mixin(name, dryrun)
